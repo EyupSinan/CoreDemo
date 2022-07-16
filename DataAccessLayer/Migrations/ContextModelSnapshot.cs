@@ -77,9 +77,14 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
+                    b.Property<int>("WriterID")
+                        .HasColumnType("int");
+
                     b.HasKey("BlogID");
 
                     b.HasIndex("CategoryID");
+
+                    b.HasIndex("WriterID");
 
                     b.ToTable("Blogs");
                 });
@@ -115,8 +120,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("BlogID")
                         .HasColumnType("int");
 
-                    b.Property<int>("CommentContent")
-                        .HasColumnType("int");
+                    b.Property<string>("CommentContent")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CommentDate")
                         .HasColumnType("datetime2");
@@ -124,8 +129,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("CommentStatus")
                         .HasColumnType("bit");
 
-                    b.Property<int>("CommentTitle")
-                        .HasColumnType("int");
+                    b.Property<string>("CommentTitle")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CommentUserName")
                         .HasColumnType("nvarchar(max)");
@@ -162,6 +167,24 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("ContactID");
 
                     b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.NewsLetter", b =>
+                {
+                    b.Property<int>("MailID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Mail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("MaılStatus")
+                        .HasColumnType("bit");
+
+                    b.HasKey("MailID");
+
+                    b.ToTable("NewsLetters");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Writer", b =>
@@ -202,7 +225,15 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EntityLayer.Concrete.Writer", "Writers")
+                        .WithMany("Blogs")
+                        .HasForeignKey("WriterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Writers");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Comment", b =>
@@ -222,6 +253,11 @@ namespace DataAccessLayer.Migrations
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Category", b =>
+                {
+                    b.Navigation("Blogs");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Writer", b =>
                 {
                     b.Navigation("Blogs");
                 });

@@ -31,14 +31,28 @@ namespace BusinessLayer.Concrete
             throw new NotImplementedException();
         }
 
+        public List<Blog> GetBlogListWithCategory()
+        {
+            return _blogDAL.GetListWithCategory();
+        }
+
         public Blog GetById(int id)
         {
             throw new NotImplementedException();
+        }
+        public List<Blog> GetBlogByID(int id)
+        {
+            return _blogDAL.GetListAll(x => x.BlogID == id);
         }
 
         public List<Blog> GetList()
         {
             return _blogDAL.GetListAll();
+        }
+
+        public List<Blog> GetBlogListByWriter(int id)
+        {
+            return _blogDAL.GetListAll(x => x.WriterID == id);
         }
     }
 }
